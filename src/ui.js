@@ -1,3 +1,4 @@
+import { fetchQuestions } from './api.js';
 import { state, setState } from './state.js';
 
 export function render() {
@@ -6,13 +7,26 @@ export function render() {
 
   // Loading state
   if (state.status === 'loading') {
-    root.innerHTML = `<p>Loading...</p>`;
+    root.innerHTML = `<p class="loading-state">Loading...</p>`;
     return;
   }
 
   // Error state
   if (state.status === 'error') {
-    root.innerHTML = `<p>Something went wrong.</p>`;
+    root.innerHTML = `<p class="error-state">Something went wrong.</p>`;
+    return;
+  }
+
+  if (state.currentQuestionIndex >= state.questions.length) {
+    root.innerHTML = `
+      <div>
+        <h2>Quiz Finished</h2>
+        <p>Score: ${state.score}</p>
+        <button id="restart">Restart</button>
+      </div>
+    `;
+
+    document.getElementById('restart').addEventListener('click', restartQuiz);
     return;
   }
 
@@ -21,5 +35,66 @@ export function render() {
 
   root.innerHTML = `
     <h2>${question.question}</h2>
+    <div id="answers">
+      ${question.answers
+        .map(
+          (a) => `
+        <button class="answer" data-answer="${a}">
+          ${a}
+        </button>
+      `
+        )
+        .join('')}
+
+      <button id="next" ${!state.selectedAnswer ? 'disabled' : ''}>
+        Next
+      </button>
+    </div>
   `;
+
+  document.querySelectorAll('.answer').forEach((btn) => {
+    btn.addEventListener('click', handleAnswer);
+  });
+
+  document.getElementById('next')?.addEventListener('click', handleNext);
+}
+
+// ----- Event Handlers -----
+
+async function restartQuiz() {
+  setState({ status: 'loading' });
+  render();
+
+  try {
+    const questions = await fetchQuestions();
+    setState({
+      status: 'ready',
+      currentQuestionIndex: 0,
+      questions: questions,
+      selectedAnswer: null,
+      score: 0,
+    });
+    render();
+  } catch {
+    setState({ status: 'error' });
+    render();
+  }
+}
+
+function handleAnswer(e) {
+  const selected = e.target.dataset.answer;
+  const question = state.questions[state.currentQuestionIndex];
+
+  const isCorrect = selected === question.correctAnswer;
+
+  setState({ selectedAnswer: selected, score: isCorrect ? state.score + 1 : state.score });
+  render();
+}
+
+function handleNext() {
+  setState({
+    currentQuestionIndex: state.currentQuestionIndex + 1,
+    selectedAnswer: null,
+  });
+  render();
 }

@@ -8,10 +8,13 @@ async function init() {
     setState({ status: 'loading' });
     render();
 
+    // Show Ready
     const questions = await fetchQuestions();
     setState({ questions, status: 'ready' });
+    console.log(state);
     render();
   } catch {
+    // Show Error
     setState({ status: 'error' });
     render();
   }
