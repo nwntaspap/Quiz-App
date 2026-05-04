@@ -1,0 +1,33 @@
+{
+  "name": "quiz-app",
+  "version": "1.0.0",
+  "description": "A quiz app using Open Trivia DB",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nwntaspap/Quiz-App.git"
+  },
+  "keywords": [
+    "quiz",
+    "trivia",
+    "education"
+  ],
+  "author": "nwntasPap",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nwntaspap/Quiz-App/issues"
+  },
+  "homepage": "https://github.com/nwntaspap/Quiz-App#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.3"
+  }
+}
