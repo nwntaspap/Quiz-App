@@ -1,9 +1,50 @@
 import { fetchQuestions } from './api.js';
 import { state, setState } from './state.js';
+import { CATEGORIES } from './categories.js';
+import { startQuizFlow } from './app.js';
 
 export function render() {
   const root = document.getElementById('app-root');
   if (!root) return;
+
+  // Setup state
+  if (state.status === 'setup') {
+    root.innerHTML = `
+    <h2>Start Quiz</h2>
+    <div class="container">
+      <label>
+        Number of Questions:
+        <input type="number" id="amount" value="${state.amount}" min="1" max="50" />
+      </label>
+
+      <label>
+        Category:
+        <select id="category">
+        ${CATEGORIES.map(
+          (c) => `
+        <option value="${c.id}">${c.name}</option>
+        `
+        ).join('')}
+        </select>
+      </label>
+
+      <label>
+        Difficulty:
+        <select id="difficulty">
+          <option value="">Any</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </label>
+
+      <button id="start">Start Quiz</button>
+    </div>
+  `;
+
+    document.getElementById('start').addEventListener('click', startQuiz);
+    return;
+  }
 
   // Loading state
   if (state.status === 'loading') {
@@ -17,6 +58,7 @@ export function render() {
     return;
   }
 
+  // Finished state
   if (state.currentQuestionIndex >= state.questions.length) {
     root.innerHTML = `
       <h2>Quiz Finished</h2>
@@ -112,4 +154,20 @@ function handleNext() {
     selectedAnswer: null,
   });
   render();
+}
+
+function startQuiz() {
+  const amount = Number(document.getElementById('amount').value);
+  const difficulty = document.getElementById('difficulty').value;
+  const category = document.getElementById('category').value;
+
+  setState({
+    amount,
+    category,
+    difficulty,
+    currentQuestionIndex: 0,
+    score: 0,
+  });
+
+  startQuizFlow();
 }

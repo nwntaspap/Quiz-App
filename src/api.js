@@ -1,7 +1,15 @@
-const API_URL = 'https://opentdb.com/api.php?amount=10&type=multiple';
+const BASE_URL = 'https://opentdb.com/api.php';
 
-export async function fetchQuestions() {
-  const res = await fetch(API_URL);
+export async function fetchQuestions({ amount = 10, category = '', difficulty = '' } = {}) {
+  const params = new URLSearchParams({
+    amount,
+    type: 'multiple',
+  });
+
+  if (category) params.append('category', category);
+  if (difficulty) params.append('difficulty', difficulty);
+
+  const res = await fetch(`${BASE_URL}?${params.toString()}`);
   const data = await res.json();
   return data.results.map(normalizeQuestions);
 }
@@ -15,7 +23,7 @@ function decodeHTML(str) {
 }
 
 function shuffle(arr) {
-  return [...arr].sort(() => Math.random() * 0.5);
+  return [...arr].sort(() => Math.random() - 0.5);
 }
 
 function normalizeQuestions(question) {
