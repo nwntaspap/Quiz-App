@@ -1,4 +1,3 @@
-import { fetchQuestions } from './api.js';
 import { state, setState } from './state.js';
 import { CATEGORIES } from './categories.js';
 import { startQuizFlow } from './app.js';
@@ -139,6 +138,7 @@ function goToSetup() {
     selectedAnswer: null,
     score: 0,
   });
+  render();
 }
 
 function handleAnswer(e) {

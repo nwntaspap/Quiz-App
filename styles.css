@@ -1,20 +1,217 @@
-.answer {
-  padding: 10px;
-  margin: 5px;
+/* ── Reset & Base ───────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f0f1a;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #e8e8f0;
+  padding: 1.5rem;
+}
+
+/* ── App Root ───────────────────────────────────────── */
+#app-root {
+  width: 100%;
+  max-width: 640px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Headings ───────────────────────────────────────── */
+h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 1.25rem;
+  color: #ffffff;
+  background: linear-gradient(135deg, #a78bfa, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Container Card ─────────────────────────────────── */
+.container {
+  background: #1a1a2e;
+  border: 1px solid #2e2e4a;
+  border-radius: 16px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Form Labels & Inputs (Setup Screen) ────────────── */
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #9090b0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+input[type='number'],
+select {
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #2e2e4a;
+  background: #0f0f1a;
+  color: #e8e8f0;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type='number']:focus,
+select:focus {
+  border-color: #a78bfa;
+}
+
+select option {
+  background: #1a1a2e;
+}
+
+/* ── Buttons ────────────────────────────────────────── */
+button {
+  padding: 0.7rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+/* Primary action buttons (Start, Next, Restart) */
+#start,
+#next,
+#restart {
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  color: #fff;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+#start:hover,
+#next:hover,
+#restart:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+#start:active,
+#next:active,
+#restart:active {
+  transform: translateY(0);
+}
+
+#next:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Secondary button (Change Settings) */
+#setup {
+  background: transparent;
+  border: 1px solid #2e2e4a;
+  color: #9090b0;
+  width: 100%;
+}
+
+#setup:hover {
+  border-color: #a78bfa;
+  color: #e8e8f0;
+}
+
+/* ── Answer Buttons ─────────────────────────────────── */
+#answers {
+  gap: 0.65rem;
+}
+
+.answer {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #0f0f1a;
+  border: 1px solid #2e2e4a;
+  color: #e8e8f0;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 400;
+  transition: all 0.15s ease;
+  margin: 0;
+}
+
+.answer:not(:disabled):hover {
+  border-color: #a78bfa;
+  background: #1e1e35;
+  transform: translateX(4px);
 }
 
 .answer.correct {
-  background-color: rgb(10, 146, 10);
-  color: #fff;
+  background: #14532d;
+  border-color: #22c55e;
+  color: #bbf7d0;
 }
 
 .answer.wrong {
-  background-color: rgb(202, 14, 14);
-  color: #fff;
+  background: #7f1d1d;
+  border-color: #ef4444;
+  color: #fecaca;
 }
 
 .answer:disabled {
-  opacity: 0.7;
+  opacity: 0.75;
   cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Next button below answers ──────────────────────── */
+#next {
+  margin-top: 0.5rem;
+}
+
+/* ── Score / Finish Screen ──────────────────────────── */
+.container p {
+  font-size: 1.15rem;
+  color: #c0c0d8;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+/* ── Status States ──────────────────────────────────── */
+.loading-state,
+.error-state {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 2rem;
+  color: #9090b0;
+}
+
+.error-state {
+  color: #f87171;
 }
