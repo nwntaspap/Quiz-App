@@ -1,4 +1,4 @@
-import { state, setState } from './state.js';
+import { setState } from './state.js';
 import { fetchQuestions } from './api.js';
 import { render } from './ui.js';
 
@@ -11,7 +11,6 @@ async function init() {
     // Show Ready
     const questions = await fetchQuestions();
     setState({ questions, status: 'ready' });
-    console.log(state);
     render();
   } catch {
     // Show Error

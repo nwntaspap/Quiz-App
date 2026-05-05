@@ -19,8 +19,8 @@ export function render() {
 
   if (state.currentQuestionIndex >= state.questions.length) {
     root.innerHTML = `
-      <div>
-        <h2>Quiz Finished</h2>
+      <h2>Quiz Finished</h2>
+      <div class="container">
         <p>Score: ${state.score}</p>
         <button id="restart">Restart</button>
       </div>
@@ -34,23 +34,38 @@ export function render() {
   const question = state.questions[state.currentQuestionIndex];
 
   root.innerHTML = `
-    <h2>${question.question}</h2>
-    <div id="answers">
-      ${question.answers
-        .map(
-          (a) => `
-        <button class="answer" data-answer="${a}">
+  <h2>${question.question}</h2>
+
+  <div class="container" id="answers">
+    ${question.answers
+      .map((a) => {
+        let className = 'answer';
+
+        if (state.selectedAnswer) {
+          if (a === question.correctAnswer) {
+            className += ' correct';
+          } else if (a === state.selectedAnswer) {
+            className += ' wrong';
+          }
+        }
+
+        return `
+        <button 
+          class="${className}" 
+          data-answer="${a}"
+          ${state.selectedAnswer ? 'disabled' : ''}
+        >
           ${a}
         </button>
-      `
-        )
-        .join('')}
+      `;
+      })
+      .join('')}
+  </div>
 
-      <button id="next" ${!state.selectedAnswer ? 'disabled' : ''}>
-        Next
-      </button>
-    </div>
-  `;
+  <button id="next" ${!state.selectedAnswer ? 'disabled' : ''}>
+    Next
+  </button>
+`;
 
   document.querySelectorAll('.answer').forEach((btn) => {
     btn.addEventListener('click', handleAnswer);

@@ -1,0 +1,20 @@
+.answer {
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.answer.correct {
+  background-color: rgb(10, 146, 10);
+  color: #fff;
+}
+
+.answer.wrong {
+  background-color: rgb(202, 14, 14);
+  color: #fff;
+}
+
+.answer:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
