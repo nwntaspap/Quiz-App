@@ -63,12 +63,14 @@ export function render() {
     root.innerHTML = `
       <h2>Quiz Finished</h2>
       <div class="container">
-        <p>Score: ${state.score}</p>
+        <p>Score: ${state.score} / ${state.questions.length}</p>
         <button id="restart">Restart</button>
+        <button id="setup">Change Settings</button>
       </div>
     `;
 
     document.getElementById('restart').addEventListener('click', restartQuiz);
+    document.getElementById('setup').addEventListener('click', goToSetup);
     return;
   }
 
@@ -118,24 +120,25 @@ export function render() {
 
 // ----- Event Handlers -----
 
-async function restartQuiz() {
-  setState({ status: 'loading' });
+function restartQuiz() {
+  setState({
+    currentQuestionIndex: 0,
+    score: 0,
+    selectedAnswer: null,
+  });
   render();
 
-  try {
-    const questions = await fetchQuestions();
-    setState({
-      status: 'ready',
-      currentQuestionIndex: 0,
-      questions: questions,
-      selectedAnswer: null,
-      score: 0,
-    });
-    render();
-  } catch {
-    setState({ status: 'error' });
-    render();
-  }
+  startQuizFlow(); // reuse settings
+}
+
+function goToSetup() {
+  setState({
+    status: 'setup',
+    currentQuestionIndex: 0,
+    questions: [],
+    selectedAnswer: null,
+    score: 0,
+  });
 }
 
 function handleAnswer(e) {
@@ -168,6 +171,7 @@ function startQuiz() {
     currentQuestionIndex: 0,
     score: 0,
   });
+  render();
 
   startQuizFlow();
 }
